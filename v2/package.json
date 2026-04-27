@@ -1,0 +1,20 @@
+{
+  "name": "kim-portfolio-tracker",
+  "version": "2.0.0",
+  "description": "Daily DeFi portfolio tracking — BloFin algo bot + GMX hedges + EVM LPs + Sui",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "brief": "node brief/generate-brief.mjs && node brief/morning-brief-audio.mjs && node brief/update-rss.mjs",
+    "test": "DRY_RUN=true node index.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.20.0",
+    "airtable": "^0.12.2",
+    "ethers": "^6.9.0",
+    "node-fetch": "^3.3.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
