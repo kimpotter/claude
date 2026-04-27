@@ -33,7 +33,7 @@ jobs:
         run: node index.js
 
   generate-brief:
-    name: Generate & deliver morning brief
+    name: Generate morning brief
     runs-on: ubuntu-latest
     needs: daily-check
     if: vars.DRY_RUN != 'true'
@@ -56,14 +56,3 @@ jobs:
           AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
           AIRTABLE_BASE_ID: ${{ secrets.AIRTABLE_BASE_ID }}
         run: node brief/generate-brief.mjs
-
-      - name: Convert brief to audio via ElevenLabs
-        env:
-          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
-          ELEVENLABS_VOICE_ID: ${{ secrets.ELEVENLABS_VOICE_ID }}
-        run: node brief/morning-brief-audio.mjs
-
-      - name: Update RSS feed & commit
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: node brief/update-rss.mjs
