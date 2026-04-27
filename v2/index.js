@@ -9,7 +9,7 @@ import { fetchBlofinData } from './modules/blofin.js';
 import { fetchGmxData } from './modules/gmx.js';
 import { fetchEvmLpData } from './modules/evm-lp.js';
 import { fetchSuiData } from './modules/sui.js';
-import { writePositions, writeLendingPositions } from './modules/airtable.js';
+import { writePositions } from './modules/airtable.js';
 
 const DRY_RUN = process.env.DRY_RUN === 'true';
 const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
