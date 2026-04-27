@@ -32,7 +32,8 @@ export async function writePositions(records) {
   if (!records.length) return;
 
   for (const batch of chunk(records, 10)) {
-    await base(POSITIONS_TABLE).create(batch);
+    // typecast: true tells Airtable to auto-create any columns that don't exist yet
+    await base(POSITIONS_TABLE).create(batch, { typecast: true });
   }
 }
 
@@ -41,7 +42,7 @@ export async function writePositions(records) {
  * @param {Object} fields - Briefing fields: Date, BriefText, AudioUrl, etc.
  */
 export async function writeBriefing(fields) {
-  await base(BRIEFINGS_TABLE).create([{ fields }]);
+  await base(BRIEFINGS_TABLE).create([{ fields }], { typecast: true });
 }
 
 /**
@@ -55,7 +56,6 @@ export async function fetchTodayPositions() {
   await base(POSITIONS_TABLE)
     .select({
       filterByFormula: `{Date} = '${today}'`,
-      sort: [{ field: 'Protocol', direction: 'asc' }],
     })
     .eachPage((page, fetchNextPage) => {
       records.push(...page);
