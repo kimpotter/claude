@@ -1,0 +1,35 @@
+name: Muspy iCal feed
+
+on:
+  schedule:
+    - cron: '17 */6 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'muspy/atom_to_ics.py'
+      - '.github/workflows/muspy-ical.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Convert Muspy Atom feed to iCal
+        env:
+          MUSPY_FEED: https://muspy.com/feed?id=fjvam683bfy50mvizwz2vtg58emo3k
+        run: python3 muspy/atom_to_ics.py "$MUSPY_FEED" muspy/releases.ics
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898333+github-actions[bot]@users.noreply.github.com"
+          # ignore DTSTAMP-only changes
+          if git diff --quiet -I '^DTSTAMP' -- muspy/releases.ics && git ls-files --error-unmatch muspy/releases.ics >/dev/null 2>&1; then
+            git checkout -- muspy/releases.ics; echo "No changes"; exit 0
+          fi
+          git add muspy/releases.ics
+          git commit -m "Update Muspy releases calendar"
+          git push
